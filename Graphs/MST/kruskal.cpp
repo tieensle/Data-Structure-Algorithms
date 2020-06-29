@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-const int n = 13;
+const int n = 13; // size of matrix
 // int graph[n][n] = {
 //     {0, 3, 0, 0, 6, 5},
 //     {3, 0, 1, 0, 0, 4},
@@ -12,7 +12,7 @@ const int n = 13;
 //     {0, 0, 6, 0, 8, 5},
 //     {6, 0, 0, 8, 0, 2},
 //     {5, 4, 4, 5, 2, 0}};
-int graph[n][n] = {
+int graph[n][n] = { // graph
     {0, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {2, 0, 2, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0},
     {1, 2, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0},
@@ -27,10 +27,10 @@ int graph[n][n] = {
     {0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 8, 0, 8},
     {0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 8, 0}};
 
-vector<pair<int, int>> Tree;
-int d = 0;
-vector<pair<int, pair<int, int>>> edges;
-int root[n];
+vector<pair<int, pair<int, int>>> Tree;  // Vector store MST weight and edge
+int d = 0;                               // Total weight of MST
+vector<pair<int, pair<int, int>>> edges; // Vector to store sorted edge with ascending weight
+int root[n];                             // array root of vertice
 
 void init()
 {
@@ -55,7 +55,7 @@ void init()
 }
 void print()
 {
-
+    cout << "Edges of graph: " << endl;
     for (int i = 0; i < edges.size(); i++)
     {
         int weight = edges[i].first;
@@ -68,47 +68,47 @@ void kruskal()
 {
     for (int i = 0; i < edges.size(); i++)
     {
+        int weight = edges[i].first;
         int u = edges[i].second.first;
         int v = edges[i].second.second;
         if (root[u] != root[v])
         {
-            cout << "truoc duyet: " << endl;
-            cout << "root cua " << u + 1 << " la " << root[u] + 1 << endl;
-            cout << "root cua " << v + 1 << " la " << root[v] + 1 << endl;
+            // cout << "before: " << endl;
+            // cout << "root(" << u + 1 << ") : " << root[u] + 1 << endl;
+            // cout << "root(" << v + 1 << ") : " << root[v] + 1 << endl;
 
-            pair<int, int> p = make_pair(u, v);
+            pair<int, int> edge = make_pair(u, v);
+            pair<int, pair<int, int>> p = make_pair(weight, edge);
             Tree.push_back(p);
-            cout << "trong khi duyet: " << endl;
+            d += weight;
+            // cout << "In pending: " << endl;
             int currRoot = root[v];
             for (int j = 0; j < n; j++)
             {
-                cout << "root cua " << j + 1 << " la " << root[j] + 1 << " co = " << currRoot + 1 << " khong? " << endl;
+                // cout << "root(" << j + 1 << ") : " << root[j] + 1 << " = " << currRoot + 1 << "?" << endl;
 
                 if (root[j] == currRoot)
                 {
-                    cout << "root cua " << j + 1 << " chuyen tu " << root[j] + 1;
+                    // cout << "root(" << j + 1 << ") from " << root[j] + 1;
                     root[j] = root[u];
-                    cout << " thanh " << root[j] + 1 << endl;
+                    // cout << " to " << root[j] + 1 << endl;
                 }
             }
-            cout << "sau duyet: " << endl;
-            cout << "root cua " << u + 1 << " la " << root[u] + 1 << endl;
-            cout << "root cua " << v + 1 << " la " << root[v] + 1 << endl;
+            // cout << "after" << endl;
+            // cout << "root(" << u + 1 << ") : " << root[u] + 1 << endl;
+            // cout << "root(" << v + 1 << ") : " << root[v] + 1 << endl;
         }
     }
-    cout << "sau khi duyet xong root cua cac canh la: " << endl;
-    for (int i = 0; i < n; i++)
-    {
-        cout << "root cua " << i + 1 << " la " << root[i] + 1 << endl;
-    }
-    cout << "so canh trong cay khung: " << Tree.size() << endl;
-    cout << "cay khung gom nhung canh: " << endl;
+    cout << "size of MST: " << Tree.size() << endl;
+    cout << "edges of MST: " << endl;
     for (int i = 0; i < Tree.size(); i++)
     {
-        int u = Tree[i].first;
-        int v = Tree[i].second;
-        cout << "edge(" << u + 1 << "," << v + 1 << ")" << endl;
+        int weight = Tree[i].first;
+        int u = Tree[i].second.first;
+        int v = Tree[i].second.second;
+        cout << "edge(" << u + 1 << "," << v + 1 << ") : " << weight << endl;
     }
+    cout << "Total weight: " << d << endl;
 }
 int main()
 {
@@ -117,26 +117,3 @@ int main()
     kruskal();
     return 0;
 }
-
-// class UF {
-//   vector<int> root;
-//   UF(int n) { // n la so phan tu
-//     for(int i = 0; i <= n; i++) {
-//       root.push_back(i);
-//     }
-//     return root;
-//   }
-//   void union(int p, int q) {
-//     if(root[p] == root[q]) return;
-//     if(root[p] < root[q]) {
-//       root[q] = root[p];
-//     }
-//     else root[q] = root[q];
-//   }
-//   bool connected(int p, int q) {
-//     return root[p] == root[q];
-//   }
-//   int find(int p) {
-//     return root[p];
-//   }
-// }
