@@ -4,14 +4,28 @@
 #include <algorithm>
 using namespace std;
 
-const int n = 6;
-int cost[n][n] = {
-    {0, 3, 0, 0, 6, 5},
-    {3, 0, 1, 0, 0, 4},
-    {0, 1, 0, 6, 0, 4},
-    {0, 0, 6, 0, 8, 5},
-    {6, 0, 0, 8, 0, 2},
-    {5, 4, 4, 5, 2, 0}};
+const int n = 13;
+// int graph[n][n] = {
+//     {0, 3, 0, 0, 6, 5},
+//     {3, 0, 1, 0, 0, 4},
+//     {0, 1, 0, 6, 0, 4},
+//     {0, 0, 6, 0, 8, 5},
+//     {6, 0, 0, 8, 0, 2},
+//     {5, 4, 4, 5, 2, 0}};
+int graph[n][n] = {
+    {0, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {2, 0, 2, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0},
+    {1, 2, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0},
+    {3, 0, 4, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 5, 0, 6, 0, 0, 0, 6, 0, 0, 0},
+    {0, 5, 5, 5, 6, 0, 6, 6, 6, 6, 0, 0, 0},
+    {0, 5, 0, 0, 0, 6, 0, 6, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 6, 6, 0, 7, 0, 0, 7, 7},
+    {0, 0, 0, 0, 0, 6, 0, 7, 0, 7, 7, 0, 0},
+    {0, 0, 0, 0, 6, 6, 0, 0, 7, 0, 7, 7, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 0, 8, 0},
+    {0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 8, 0, 8},
+    {0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 8, 0}};
 
 vector<pair<int, int>> Tree;
 int d = 0;
@@ -29,10 +43,10 @@ void init()
     {
         for (int j = i + 1; j < n; j++)
         {
-            if (cost[i][j] > 0)
+            if (graph[i][j] > 0)
             {
                 pair<int, int> edge = make_pair(i, j);
-                pair<int, pair<int, int>> weight = make_pair(cost[i][j], edge);
+                pair<int, pair<int, int>> weight = make_pair(graph[i][j], edge);
                 edges.push_back(weight);
             }
         }
@@ -65,9 +79,11 @@ void kruskal()
             pair<int, int> p = make_pair(u, v);
             Tree.push_back(p);
             cout << "trong khi duyet: " << endl;
+            int currRoot = root[v];
             for (int j = 0; j < n; j++)
             {
-                int currRoot = root[v];
+                cout << "root cua " << j + 1 << " la " << root[j] + 1 << " co = " << currRoot + 1 << " khong? " << endl;
+
                 if (root[j] == currRoot)
                 {
                     cout << "root cua " << j + 1 << " chuyen tu " << root[j] + 1;
@@ -85,7 +101,7 @@ void kruskal()
     {
         cout << "root cua " << i + 1 << " la " << root[i] + 1 << endl;
     }
-    cout << "so canh trong cay khung: " << Tree.size();
+    cout << "so canh trong cay khung: " << Tree.size() << endl;
     cout << "cay khung gom nhung canh: " << endl;
     for (int i = 0; i < Tree.size(); i++)
     {
