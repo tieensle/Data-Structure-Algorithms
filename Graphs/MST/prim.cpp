@@ -2,10 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
-const int n = 13;
+const int n = 13; // size of matrix
 // int graph[n][n] = {
 //     {0, 3, 0, 0, 6, 5},
 //     {3, 0, 1, 0, 0, 4},
@@ -13,7 +12,7 @@ const int n = 13;
 //     {0, 0, 6, 0, 8, 5},
 //     {6, 0, 0, 8, 0, 2},
 //     {5, 4, 4, 5, 2, 0}};
-int graph[n][n] = {
+int graph[n][n] = { // graph
     {0, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {2, 0, 2, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0},
     {1, 2, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0},
@@ -28,13 +27,13 @@ int graph[n][n] = {
     {0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 8, 0, 8},
     {0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 8, 0}};
 
-vector<pair<int, int>> Tree;
-int d = 0;
-vector<pair<int, pair<int, int>>> edges;
-vector<int> verticesOut;
-vector<int> vertices;
+vector<pair<int, pair<int, int>>> Tree;  // Vector store MST weight and edge
+int d = 0;                               // Total weight of MST
+vector<pair<int, pair<int, int>>> edges; // Vector to store sorted edge with ascending weight
+int root[n];                             // array root of vertice
 
-int root[n];
+// vector<int> vertices; // vector to store init vertices
+int marked[n]; // array to set all visited vertice
 
 void init()
 {
@@ -42,7 +41,7 @@ void init()
     for (int i = 0; i < n; i++)
     {
         root[i] = i;
-        vertices.push_back(i);
+        marked[i] = 0;
     }
     for (int i = 0; i < n; i++)
     {
@@ -57,10 +56,12 @@ void init()
         }
     }
     sort(edges.begin(), edges.end());
+    int s = edges[0].second.first;
+    marked[s] = 1; // mark vertice s is visited vertice
 }
 void print()
 {
-    cout << "do thi gom nhung canh: " << endl;
+    cout << "Edges of graph: " << endl;
     for (int i = 0; i < edges.size(); i++)
     {
         int weight = edges[i].first;
@@ -72,10 +73,40 @@ void print()
 
 void prim()
 {
+    for (int i = 0; i < edges.size(); i++)
+    {
+        int weight = edges[i].first;
+        int u = edges[i].second.first;
+        int v = edges[i].second.second;
+        if (marked[u] != marked[v] || (marked[u] == 0 && marked[v] == 0))
+        {
+            pair<int, int> edge = make_pair(u, v);
+            pair<int, pair<int, int>> p = make_pair(weight, edge);
+            Tree.push_back(p);
+            d += weight;
+            if (marked[v] == 0 && marked[u] == 1)
+                marked[v] = 1;
+            if (marked[u] == 0)
+                marked[u] = 1;
+        }
+    }
+    // print Tree
+    cout << "size of MST: " << Tree.size() << endl;
+    cout << "edges of MST: " << endl;
+    for (int i = 0; i < Tree.size(); i++)
+    {
+        int weight = Tree[i].first;
+        int u = Tree[i].second.first;
+        int v = Tree[i].second.second;
+        cout << "edge(" << u + 1 << "," << v + 1 << ") : " << weight << endl;
+    }
+    cout << "Total weight: " << d << endl;
 }
 
 int main()
 {
     init();
     print();
+    prim();
+    return 0;
 }
