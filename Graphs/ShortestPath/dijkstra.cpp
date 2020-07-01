@@ -59,34 +59,51 @@ void dijkstra(int node)
             }
         }
         T.erase(T.begin() + pos, T.begin() + pos + 1); // remove vertice from T
-        cout << "T remain: " << endl;
-        for (int i = 0; i < T.size(); i++)
-        {
-            cout << T[i] + 1 << " ";
-        }
-        cout << endl;
+        // cout << "T remain: " << endl;
+        // for (int i = 0; i < T.size(); i++)
+        // {
+        //     cout << T[i] + 1 << " ";
+        // }
+        // cout << endl;
         for (int i = 0; i < T.size(); i++)
         {
             int v = T[i];
-            if (d[v] > du + graph[u][v])
+            int a = graph[u][v] == 0 ? INF : graph[u][v];
+            if (d[v] > du + a)
             {
-                d[v] = du + graph[u][v];
+                d[v] = du + a;
                 pre[v] = u;
             }
         }
     }
-    cout << "prev array: " << endl;
+    // cout << "prev array: " << endl;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << " prev " << pre[i] + 1 << " ";
+    //     cout << " label " << d[i] << endl;
+    // }
+}
+void print(int s)
+{
+    s = s - 1;
+    cout << "Path from " << s + 1 << " to remain vertice: " << endl;
     for (int i = 0; i < n; i++)
     {
-        cout << " prev " << pre[i] + 1 << " ";
-        cout << " label " << d[i] << endl;
+        if (i == s || d[i] == INF)
+            continue;
+        int e = i;
+        while (e != s)
+        {
+            cout << e + 1 << " <- ";
+            e = pre[e];
+        }
+        cout << s + 1 << endl;
     }
-}
-void print(int s, int t)
-{
 }
 
 int main()
 {
-    dijkstra(1);
+    int node = 1;
+    dijkstra(node);
+    print(node);
 }
