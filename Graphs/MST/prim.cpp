@@ -75,6 +75,8 @@ void prim()
 {
     for (int i = 0; i < edges.size(); i++)
     {
+        if (Tree.size() == n - 1)
+            break;
         int weight = edges[i].first;
         int u = edges[i].second.first;
         int v = edges[i].second.second;
