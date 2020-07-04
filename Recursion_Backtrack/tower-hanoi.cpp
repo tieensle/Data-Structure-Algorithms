@@ -9,27 +9,29 @@ void moveDisk(int n, char col1, char col2)
     cout << "move disk " << n << " from column " << col1 << " to column " << col2 << endl;
 }
 
-void hanoiTower(int n, char a, char b, char c)
+void hanoiTower(int n, char from, char to, char aux)
 {
     if (n == 1)
+        moveDisk(1, from, to);
+    else
     {
-        moveDisk(n, a, c);
-        return;
+        hanoiTower(n - 1, from, aux, to);
+        moveDisk(n, from, to);
+        hanoiTower(n - 1, aux, to, from);
     }
-    hanoiTower(n - 1, a, c, b);
-    moveDisk(n, a, c);
-    hanoiTower(n - 1, b, c, a);
+    return;
 }
 
 //Driver Main Program
 int main()
 {
+    cout << "Goal : move all disks from A to C: " << endl;
     int n;
     while (n != 0)
     {
         cout << "enter the number of disk (0 to quit): ";
         cin >> n;
-        hanoiTower(n, 'A', 'B', 'C');
+        hanoiTower(n, 'A', 'C', 'B');
     }
     return 0;
 }
