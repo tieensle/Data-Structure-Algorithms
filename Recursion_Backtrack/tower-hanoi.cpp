@@ -4,11 +4,13 @@
 
 using namespace std;
 
+//move disk
 void moveDisk(int n, char col1, char col2)
 {
     cout << "move disk " << n << " from column " << col1 << " to column " << col2 << endl;
 }
 
+//main algorithm (recursion)
 void hanoiTower(int n, char from, char to, char aux)
 {
     if (n == 1)
