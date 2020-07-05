@@ -1,24 +1,25 @@
 // #include<bits/stdc++.h>
 #include <iostream>
 #include <vector>
-#define INF 9999
+#define INF 99999
+
+// #define INF 65 (if 65 refer to INF?)
 
 using namespace std;
 
-const int n = 9;
+const int n = 7;
 int d[n]; // array assign temporary label for vertice
 int pre[n];
 vector<int> T; // vector to store vertices have temporary label
 
-int graph[n][n] = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
-                   {4, 0, 8, 0, 0, 0, 0, 11, 0},
-                   {0, 8, 0, 7, 0, 4, 0, 0, 2},
-                   {0, 0, 7, 0, 9, 14, 0, 0, 0},
-                   {0, 0, 0, 9, 0, 10, 0, 0, 0},
-                   {0, 0, 4, 14, 10, 0, 2, 0, 0},
-                   {0, 0, 0, 0, 0, 2, 0, 1, 6},
-                   {8, 11, 0, 0, 0, 0, 1, 0, 7},
-                   {0, 0, 2, 0, 0, 0, 6, 7, 0}};
+int graph[n][n] = {
+    {0, 11, 65, 17, 65, 65, 65},
+    {65, 0, 12, 65, 65, 10, 16},
+    {65, 65, 0, 13, 14, 65, 19},
+    {65, 65, 65, 0, 65, 65, 18},
+    {65, 65, 65, 65, 0, 65, 15},
+    {65, 13, 18, 65, 65, 0, 10},
+    {65, 65, 65, 65, 65, 65, 0}};
 
 void init(int s)
 { // s is start node
@@ -43,7 +44,6 @@ void init(int s)
 
 void dijkstra(int node)
 {
-    init(node);
     while (!T.empty())
     {
         int du = INF;
@@ -59,12 +59,6 @@ void dijkstra(int node)
             }
         }
         T.erase(T.begin() + pos, T.begin() + pos + 1); // remove vertice from T
-        // cout << "T remain: " << endl;
-        // for (int i = 0; i < T.size(); i++)
-        // {
-        //     cout << T[i] + 1 << " ";
-        // }
-        // cout << endl;
         for (int i = 0; i < T.size(); i++)
         {
             int v = T[i];
@@ -76,12 +70,6 @@ void dijkstra(int node)
             }
         }
     }
-    // cout << "prev array: " << endl;
-    // for (int i = 0; i < n; i++)
-    // {
-    //     cout << " prev " << pre[i] + 1 << " ";
-    //     cout << " label " << d[i] << endl;
-    // }
 }
 void print(int s)
 {
@@ -89,21 +77,27 @@ void print(int s)
     cout << "Path from " << s + 1 << " to remain vertice: " << endl;
     for (int i = 0; i < n; i++)
     {
-        if (i == s || d[i] == INF)
+        if (i == s)
             continue;
+        if (d[i] >= INF)
+        {
+            cout << "No path from " << s + 1 << " to " << i + 1 << endl;
+            continue;
+        }
         int e = i;
         while (e != s)
         {
             cout << e + 1 << " <- ";
             e = pre[e];
         }
-        cout << s + 1 << endl;
+        cout << s + 1 << " (weight = " << d[i] << ")" << endl;
     }
 }
 
 int main()
 {
-    int node = 1;
-    dijkstra(node);
-    print(node);
+    int start = 1;
+    init(start);
+    dijkstra(start);
+    print(start);
 }
