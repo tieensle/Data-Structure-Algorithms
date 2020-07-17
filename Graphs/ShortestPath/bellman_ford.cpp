@@ -16,67 +16,64 @@ int graph[n][n] = {{0, 7, 0, 9, 4, 0, 0, 0, 0},
                    {0, 0, 0, 0, 0, -2, 0, 0, -3},
                    {0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
-int d[n][n];
-int nex[n][n];
+int d[n];
+int pre[n];
 
-void init()
-{
+void init(int s)
+{ // s is start node
     for (int i = 1; i <= n; i++)
     {
-        for (int j = 1; j <= n; j++)
-        {
-            d[i][j] = (graph[i - 1][j - 1] == 0) ? INF : graph[i - 1][j - 1];
-            nex[i][j] = j;
-        }
+        d[i] = (graph[s - 1][i - 1] == 0) ? INF : graph[s - 1][i - 1];
+        pre[i] = s;
     }
 }
-void floyd()
+
+void bellman_ford(int s)
 {
-    for (int k = 1; k <= n; k++)
+    for (int k = 1; k <= n - 1; k++)
     {
-        for (int i = 1; i <= n; i++)
+        for (int v = 1; v <= n; v++)
         {
-            for (int j = 1; j <= n; j++)
+            if (v == s)
+                continue;
+            for (int u = 1; u <= n; u++)
             {
-                if (d[i][j] > d[i][k] + d[k][j] && d[i][k] != INF && d[k][j] != INF)
+                if (d[v] > d[u] + graph[u - 1][v - 1] && d[u] != INF && graph[u - 1][v - 1] != 0)
                 {
-                    d[i][j] = d[i][k] + d[k][j];
-                    nex[i][j] = nex[i][k];
+                    d[v] = d[u] + graph[u - 1][v - 1];
+                    pre[v] = u;
                 }
             }
         }
     }
 }
-void print(int s, int t)
+void print(int s)
 {
-    if (s == t)
-        return;
-    if (d[s][t] >= INF)
+    cout << "Path from " << s << " to remain vertice: " << endl;
+    for (int i = 1; i <= n; i++)
     {
-        cout << "No path from " << s << " to " << t << endl;
-        return;
+        if (i == s)
+            continue;
+        if (d[i] >= INF)
+        {
+            cout << "No path from " << s << " to " << i << endl;
+            continue;
+        }
+        int e = i;
+        while (e != s)
+        {
+            cout << e << " <- ";
+            e = pre[e];
+        }
+        cout << s << " (weight = " << d[i] << ")" << endl;
     }
-    cout << "Path from " << s << " to " << t << " : ";
-    int weight = d[s][t];
-    while (s != t)
-    {
-        cout << s << " -> ";
-        s = nex[s][t];
-    }
-    cout << t << " (weight = " << weight << ")" << endl;
 }
 
 int main()
 {
-
-    init();
-    floyd();
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            print(i, j);
-        }
-    }
+    int start = 5; // node start
+    init(start);
+    bellman_ford(start);
+    print(start);
     return 0;
 }
