@@ -67,6 +67,7 @@ int cloneGraph[13][13] = { // undirected graph
 //     {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
 //     {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0}};
 
+//Init Method
 void init()
 {
     for (int i = 0; i < n; i++)
@@ -78,6 +79,7 @@ void init()
     }
 }
 
+// check graph connected
 void dfs(int start)
 {
     visited = new bool[n];
@@ -109,6 +111,7 @@ void dfs(int start)
         connected = false;
 }
 
+// check graph has euler circuit ?
 bool checkCondition()
 {
     dfs(1);
@@ -143,6 +146,7 @@ bool checkCondition()
     return true;
 }
 
+// find euler circuit start from u vertice
 void euler_circuit(int u)
 {
     init();
@@ -178,6 +182,7 @@ void euler_circuit(int u)
     cout << endl;
 }
 
+// find all euler circuit in graph
 void findEulerCircuit()
 {
     if (checkCondition())
@@ -190,6 +195,7 @@ void findEulerCircuit()
     }
 }
 
+//Driver Main Program
 int main()
 {
     findEulerCircuit();
